@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Household Income Inequality in Malaysia</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    #vis {
+      margin: auto;
+      max-width: 900px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Household Income Inequality in Malaysia by State (Gini Index, 2022)</h1>
+  <div id="vis"></div>
+
+  <script type="text/javascript">
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Household Income Inequality in Malaysia by State (Gini Index, 2022)",
+      "width": 700,
+      "height": 300,
+      "projection": { 
+        "type": "mercator", 
+        "center": [110, 4], 
+        "scale": 2000 
+      },
+      "layer": [
+        {
+          "data": { "graticule": {"step": [5, 5]} },
+          "mark": {"type": "geoshape", "stroke": "lightgray"}
+        },
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/gadm41_MYS_1.json",
+            "format": {"type": "topojson", "feature": "gadm41_MYS_1"}
+          },
+          "transform": [
+            {
+              "lookup": "properties.NAME_1",
+              "from": {
+                "data": {
+                  "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_inequality_state.csv"
+                },
+                "transform": [
+                  {"calculate": "year(datum.date)", "as": "year"},
+                  {"filter": "datum.year == 2022"}
+                ],
+                "key": "state",
+                "fields": ["gini","year"]
+              }
+            }
+          ],
+          "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+          "encoding": {
+            "color": {
+              "field": "gini",
+              "type": "quantitative",
+              "scale": {"scheme": "reds", "domain": [0.30, 0.45]},
+              "legend": {"title": "Gini Coefficient"}
+            },
+            "tooltip": [
+              {"field": "properties.NAME_1", "title": "State"},
+              {"field": "gini", "title": "Gini Coefficient", "format": ".3f"},
+              {"field": "year", "title": "Year"}
+            ]
+          }
+        }
+      ]
+    };
+
+    vegaEmbed('#vis', spec).then(function(result) {
+      console.log("Map rendered successfully!");
+    }).catch(console.error);
+  </script>
+</body>
+</html>
