@@ -2,41 +2,367 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Household Income Inequality in Malaysia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malaysia Economic Inequality Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    #vis {
-      margin: auto;
-      max-width: 900px;
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f8f9fa;
+    }
+
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px;
+      background: linear-gradient(135deg, #1a3a5f 0%, #2c5282 100%);
+      color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .dashboard-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .dashboard-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    .dashboard-description {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-left: 4px solid #2c5282;
+    }
+
+    .dashboard-description h2 {
+      color: #2c5282;
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .dashboard-description p {
+      margin-bottom: 15px;
+      font-size: 1.05rem;
+    }
+
+    .visualization-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .viz-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .viz-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .viz-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .viz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .viz-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #2c5282;
+    }
+
+    .viz-type {
+      font-size: 0.85rem;
+      background: #e2e8f0;
+      color: #4a5568;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .viz-description {
+      margin-bottom: 15px;
+      color: #4a5568;
+      font-size: 0.95rem;
+    }
+
+    .viz-container {
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .key-insights {
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      margin-top: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .key-insights h2 {
+      color: #2c5282;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .insight-item {
+      margin-bottom: 15px;
+      padding-left: 20px;
+      border-left: 3px solid #e2e8f0;
+    }
+
+    .insight-item strong {
+      color: #2c5282;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      color: #718096;
+      font-size: 0.9rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    @media (max-width: 1200px) {
+      .visualization-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Household Income Inequality in Malaysia by State (Gini Index, 2022)</h1>
-  <div id="vis"></div>
+
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Malaysia Economic Inequality Dashboard</h1>
+    <p>Analyzing income distribution, poverty rates, and regional disparities across Malaysian states</p>
+  </header>
+
+  <section class="dashboard-description">
+    <h2>About This Dashboard</h2>
+    <p>This interactive dashboard provides a comprehensive view of economic inequality in Malaysia, tracking trends from 1970 to 2022. It examines how income and wealth are distributed across different states, identifies regions with the highest poverty rates, and shows the relationship between household income and expenditure.</p>
+    <p>The data reveals significant regional disparities, with states like Sabah and Kelantan facing much higher poverty rates compared to more developed regions like Kuala Lumpur and Selangor.</p>
+  </section>
+
+
+
+
+
+   <div class="visualization-grid">
+      <!-- Gini Coefficient Trend -->
+      <div class="viz-card wide">
+        <div class="viz-header">
+          <div class="viz-title">National Gini Coefficient Trend (1970-2022)</div>
+          <div class="viz-type">Line Chart</div>
+        </div>
+        <div class="viz-description">
+          Tracks Malaysia's income inequality over five decades. The Gini coefficient ranges from 0 (perfect equality) to 1 (perfect inequality). Malaysia has made significant progress, reducing inequality from 0.557 in 1976 to 0.404 in 2022.
+        </div>
+        <div class="viz-container" id="giniChart"></div>
+      </div>
+
+<script type="text/javascript">
+    const giniChartSpec = {
+      "data": {
+        "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_inequality.csv"
+      },
+      "width": 800,
+      "height": 400,
+      "layer": [
+        // Main line chart with tooltip
+        {
+          "mark": {
+            "type": "line",
+            "point": true,
+            "tooltip": true  // This enables tooltips for this mark
+          },
+          "encoding": {
+            "x": {
+              "field": "date",
+              "type": "temporal",
+              "title": "Year",
+              "axis": {
+                "format": "%Y",
+                "grid": false
+              },
+              "scale": {
+                "domain": ["1968-01-01", "2023-12-31"]
+              }
+            },
+            "y": {
+              "field": "gini",
+              "type": "quantitative",
+              "title": "Gini Coefficient",
+              "axis": {"format": ".3f"}
+            }
+          }
+        },
+        // Arrow pointing to highest point (1976)
+        {
+          "data": {
+            "values": [
+              {
+                "date": "1978-01-01",
+                "gini": 0.54,
+                "date2": "1976-01-01", 
+                "gini2": 0.555
+              }
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "stroke": "#e03434ff",
+            "strokeWidth": 1.5
+          },
+          "encoding": {
+            "x": {"field": "date", "type": "temporal"},
+            "y": {"field": "gini", "type": "quantitative"},
+            "x2": {"field": "date2", "type": "temporal"},
+            "y2": {"field": "gini2", "type": "quantitative"}
+          }
+        },
+        // Annotation text for highest point
+        {
+          "data": {
+            "values": [
+              {
+                "date": "1978-01-01",
+                "gini": 0.53,
+                "text": "TheYear 1976 is the Peak Inequality with Gini Coefficient of 0.557"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 10,
+            "dy": -13,
+            "fontSize": 12,
+            "fontWeight": "bold",
+            "fill": "#e74c3c"
+          },
+          "encoding": {
+            "x": {"field": "date", "type": "temporal"},
+            "y": {"field": "gini", "type": "quantitative"},
+            "text": {"field": "text", "type": "nominal"}
+          }
+        }
+      ]
+    };
+
+    vegaEmbed("#giniChart", giniChartSpec, {actions: false})
+      .then(result => console.log("Chart rendered"))
+      .catch(error => console.error("Error:", error));
+
+  </script>
+
+
+
+
+
+    <div class="viz-card">
+        <div class="viz-header">
+          <div class="viz-title">Household Income Inequality by State (2022)</div>
+          <div class="viz-type">Choropleth Map</div>
+        </div>
+        <div class="viz-description">
+          Shows Gini coefficients across Malaysian states. Darker colors indicate higher income inequality within the state. Sabah has the highest inequality (0.395), while Pahang has the lowest (0.308).
+        </div>
+        <div class="viz-container" id="map"></div>
+      </div>
+
+  <!-- <div id="stateInfo" class="info-panel hidden">
+    <h3>Selected State Information</h3>
+    <p id="stateName"><strong>State:</strong> <span id="stateNameValue"></span></p>
+    <p id="giniValue"><strong>Gini Coefficient:</strong> <span id="giniValueNumber"></span></p>
+    <p id="yearValue"><strong>Year:</strong> <span id="yearValueNumber"></span></p>
+  </div> -->
 
   <script type="text/javascript">
-    const spec = {
+    const mapSpec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "title": "Household Income Inequality in Malaysia by State (Gini Index, 2022)",
+      "title": "Household Income Inequality in Malaysia by State - 2022",
       "width": 700,
-      "height": 300,
-      "projection": { 
-        "type": "mercator", 
-        "center": [110, 4], 
-        "scale": 2000 
-      },
-      "layer": [
+      "height": 400,
+      "projection": { "type": "mercator", "center": [110, 4], "scale": 2000 },
+
+      // State selection filter - USING PRETTY NAMES IN DROPDOWN
+      "params": [
         {
-          "data": { "graticule": {"step": [5, 5]} },
-          "mark": {"type": "geoshape", "stroke": "lightgray"}
+          "name": "state_selection_pretty",
+          "value": "All States",
+          "bind": {
+            "input": "select",
+            "options": [
+              "All States",
+              "Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan", 
+              "Pahang", "Perak", "Perlis", "Pulau Pinang", "Sabah", 
+              "Sarawak", "Selangor", "Terengganu", "W.P. Kuala Lumpur", 
+              "W.P. Labuan", "W.P. Putrajaya"
+            ],
+            "name": "Select State: "
+          }
         },
+        {
+          "name": "state_selection_csv",
+          "expr": "state_selection_pretty == 'Negeri Sembilan' ? 'NegeriSembilan' : " +
+                  "state_selection_pretty == 'Pulau Pinang' ? 'PulauPinang' : " +
+                  "state_selection_pretty == 'Terengganu' ? 'Trengganu' : " +
+                  "state_selection_pretty == 'W.P. Kuala Lumpur' ? 'KualaLumpur' : " +
+                  "state_selection_pretty == 'W.P. Labuan' ? 'Labuan' : " +
+                  "state_selection_pretty == 'W.P. Putrajaya' ? 'Putrajaya' : " +
+                  "state_selection_pretty"
+        }
+      ],
+
+      "layer": [
+        // Graticule
+        {
+          "data": { "graticule": {"step": [2, 2]} },
+          "mark": {"type": "geoshape", "stroke": "lightgray", "fill": "none"}
+        },
+
+        // Grey layer for all non-selected states (only shows when a specific state is selected)
         {
           "data": {
             "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/gadm41_MYS_1.json",
@@ -44,18 +370,87 @@
           },
           "transform": [
             {
-              "lookup": "properties.NAME_1",
+              "calculate": "datum.properties.NAME_1 == 'W.P. Kuala Lumpur' ? 'KualaLumpur' : " +
+                          "datum.properties.NAME_1 == 'W.P. Putrajaya' ? 'Putrajaya' : " +
+                          "datum.properties.NAME_1 == 'Negeri Sembilan' ? 'NegeriSembilan' : " +
+                          "datum.properties.NAME_1 == 'Pulau Pinang' ? 'PulauPinang' : " +
+                          "datum.properties.NAME_1 == 'Terengganu' ? 'Trengganu' : " +
+                          "datum.properties.NAME_1 == 'W.P. Labuan' ? 'Labuan' : " +
+                          "datum.properties.NAME_1",
+              "as": "csv_state_name"
+            },
+            {
+              "lookup": "csv_state_name",
               "from": {
                 "data": {
                   "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_inequality_state.csv"
                 },
-                "transform": [
-                  {"calculate": "year(datum.date)", "as": "year"},
-                  {"filter": "datum.year == 2022"}
-                ],
                 "key": "state",
-                "fields": ["gini","year"]
+                "fields": ["gini", "date"]
               }
+            },
+            {
+              "calculate": "datum.date ? toNumber(substring(datum.date,0,4)) : null",
+              "as": "year"
+            },
+            // Show all states with 2022 data that are NOT selected (only when NOT "All States")
+            {
+              "filter": "datum.year == 2022 && datum.gini != null && datum.gini != '' && state_selection_pretty != 'All States' && datum.csv_state_name != state_selection_csv"
+            }
+          ],
+          "mark": {"type": "geoshape", "fill": "#cccccc", "stroke": "white", "strokeWidth": 0.5},
+          "encoding": {
+            "tooltip": [
+              {"field": "properties.NAME_1", "title": "State"},
+              {"field": "gini", "title": "Gini Coefficient", "format": ".3f"},
+              {"field": "year", "title": "Year"}
+            ]
+          }
+        },
+
+        // Colored layer for ALL states (when "All States" is selected)
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/gadm41_MYS_1.json",
+            "format": {"type": "topojson", "feature": "gadm41_MYS_1"}
+          },
+          "transform": [
+            {
+              "calculate": "datum.properties.NAME_1 == 'W.P. Kuala Lumpur' ? 'KualaLumpur' : " +
+                          "datum.properties.NAME_1 == 'W.P. Putrajaya' ? 'Putrajaya' : " +
+                          "datum.properties.NAME_1 == 'Negeri Sembilan' ? 'NegeriSembilan' : " +
+                          "datum.properties.NAME_1 == 'Pulau Pinang' ? 'PulauPinang' : " +
+                          "datum.properties.NAME_1 == 'Terengganu' ? 'Trengganu' : " +
+                          "datum.properties.NAME_1 == 'W.P. Labuan' ? 'Labuan' : " +
+                          "datum.properties.NAME_1",
+              "as": "csv_state_name"
+            },
+            {
+              "lookup": "csv_state_name",
+              "from": {
+                "data": {
+                  "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_inequality_state.csv"
+                },
+                "key": "state",
+                "fields": ["gini", "date"]
+              }
+            },
+            {
+              "calculate": "datum.date ? toNumber(substring(datum.date,0,4)) : null",
+              "as": "year"
+            },
+            // Show ALL states with 2022 data when "All States" is selected
+            {
+              "filter": "datum.year == 2022 && datum.gini != null && datum.gini != '' && state_selection_pretty == 'All States'"
+            },
+            {
+              "calculate": "datum.csv_state_name == 'KualaLumpur' ? 'W.P Kuala Lumpur' : " +
+                          "datum.csv_state_name == 'Putrajaya' ? 'W.P Putrajaya' : " +
+                          "datum.csv_state_name == 'NegeriSembilan' ? 'Negeri Sembilan' : " +
+                          "datum.csv_state_name == 'PulauPinang' ? 'Pulau Pinang' : " +
+                          "datum.csv_state_name == 'Trengganu' ? 'Terengganu' : " +
+                          "datum.csv_state_name == 'Labuan' ? 'W.P Labuan' : datum.csv_state_name",
+              "as": "state_pretty"
             }
           ],
           "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
@@ -67,18 +462,578 @@
               "legend": {"title": "Gini Coefficient"}
             },
             "tooltip": [
-              {"field": "properties.NAME_1", "title": "State"},
+              {"field": "state_pretty", "title": "State"},
               {"field": "gini", "title": "Gini Coefficient", "format": ".3f"},
               {"field": "year", "title": "Year"}
+            ]
+          }
+        },
+
+        // Colored layer for selected state only (when a specific state is selected)
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/gadm41_MYS_1.json",
+            "format": {"type": "topojson", "feature": "gadm41_MYS_1"}
+          },
+          "transform": [
+            {
+              "calculate": "datum.properties.NAME_1 == 'W.P. Kuala Lumpur' ? 'KualaLumpur' : " +
+                          "datum.properties.NAME_1 == 'W.P. Putrajaya' ? 'Putrajaya' : " +
+                          "datum.properties.NAME_1 == 'Negeri Sembilan' ? 'NegeriSembilan' : " +
+                          "datum.properties.NAME_1 == 'Pulau Pinang' ? 'PulauPinang' : " +
+                          "datum.properties.NAME_1 == 'Terengganu' ? 'Trengganu' : " +
+                          "datum.properties.NAME_1 == 'W.P. Labuan' ? 'Labuan' : " +
+                          "datum.properties.NAME_1",
+              "as": "csv_state_name"
+            },
+            {
+              "lookup": "csv_state_name",
+              "from": {
+                "data": {
+                  "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_inequality_state.csv"
+                },
+                "key": "state",
+                "fields": ["gini", "date"]
+              }
+            },
+            {
+              "calculate": "datum.date ? toNumber(substring(datum.date,0,4)) : null",
+              "as": "year"
+            },
+            // Filter for 2022 AND selected state only (when NOT "All States")
+            {
+              "filter": "datum.year == 2022 && datum.csv_state_name == state_selection_csv && datum.gini != null && datum.gini != '' && state_selection_pretty != 'All States'"
+            },
+            {
+              "calculate": "datum.csv_state_name == 'KualaLumpur' ? 'W.P Kuala Lumpur' : " +
+                          "datum.csv_state_name == 'Putrajaya' ? 'W.P Putrajaya' : " +
+                          "datum.csv_state_name == 'NegeriSembilan' ? 'Negeri Sembilan' : " +
+                          "datum.csv_state_name == 'PulauPinang' ? 'Pulau Pinang' : " +
+                          "datum.csv_state_name == 'Trengganu' ? 'Terengganu' : " +
+                          "datum.csv_state_name == 'Labuan' ? 'W.P Labuan' : datum.csv_state_name",
+              "as": "state_pretty"
+            }
+          ],
+          "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+          "encoding": {
+            "color": {
+              "field": "gini",
+              "type": "quantitative",
+              "scale": {"scheme": "reds", "domain": [0.30, 0.45]},
+              "legend": {"title": "Gini Coefficient"}
+            },
+            "tooltip": [
+              {"field": "state_pretty", "title": "State"},
+              {"field": "gini", "title": "Gini Coefficient", "format": ".3f"},
+              {"field": "year", "title": "Year"}
+            ]
+          }
+        },
+
+        // Highlight Sabah with a special border (highest Gini coefficient)
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/gadm41_MYS_1.json",
+            "format": {"type": "topojson", "feature": "gadm41_MYS_1"}
+          },
+          "transform": [
+            {
+              "calculate": "datum.properties.NAME_1 == 'W.P. Kuala Lumpur' ? 'KualaLumpur' : " +
+                          "datum.properties.NAME_1 == 'W.P. Putrajaya' ? 'Putrajaya' : " +
+                          "datum.properties.NAME_1 == 'Negeri Sembilan' ? 'NegeriSembilan' : " +
+                          "datum.properties.NAME_1 == 'Pulau Pinang' ? 'PulauPinang' : " +
+                          "datum.properties.NAME_1 == 'Terengganu' ? 'Trengganu' : " +
+                          "datum.properties.NAME_1 == 'W.P. Labuan' ? 'Labuan' : " +
+                          "datum.properties.NAME_1",
+              "as": "csv_state_name"
+            },
+            {
+              "lookup": "csv_state_name",
+              "from": {
+                "data": {
+                  "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_inequality_state.csv"
+                },
+                "key": "state",
+                "fields": ["gini", "date"]
+              }
+            },
+            {
+              "calculate": "datum.date ? toNumber(substring(datum.date,0,4)) : null",
+              "as": "year"
+            },
+            // Filter for Sabah only (highest Gini coefficient)
+            {
+              "filter": "datum.year == 2022 && datum.properties.NAME_1 == 'Sabah' && datum.gini != null && datum.gini != ''"
+            }
+          ],
+          "mark": {"type": "geoshape",  "fill": null},
+          "encoding": {
+            "tooltip": [
+              {"field": "properties.NAME_1", "title": "State"},
+              {"field": "gini", "title": "Gini Coefficient", "format": ".3f"},
+              {"value": "Highest Inequality State"}
+            ]
+          }
+        },
+
+        // Annotation pointing to Sabah
+        {
+          "data": {
+            "values": [
+              {
+                "longitude": 108.0,
+                "latitude": 6.5,
+                "text": "Sabah has the Highest Gini Coefficient of 0.395"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 10,
+            "dy": -10,
+            "fontSize": 12,
+            "fontWeight": "bold",
+            "fill": "#000000ff"
+          },
+          "encoding": {
+            "longitude": {"field": "longitude", "type": "quantitative"},
+            "latitude": {"field": "latitude", "type": "quantitative"},
+            "text": {"field": "text", "type": "nominal"}
+          }
+        },
+
+        // Arrow pointing to Sabah
+        {
+          "data": {
+            "values": [
+              {
+                "longitude": 113.5,
+                "latitude": 6.3,
+                "longitude2": 116.5,
+                "latitude2": 5.3
+              }
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "stroke": "#000000ff",
+            "strokeWidth": 1.5
+          },
+          "encoding": {
+            "longitude": {"field": "longitude", "type": "quantitative"},
+            "latitude": {"field": "latitude", "type": "quantitative"},
+            "longitude2": {"field": "longitude2", "type": "quantitative"},
+            "latitude2": {"field": "latitude2", "type": "quantitative"}
+          }
+        },
+        
+        // Base layer for states with no data for 2022
+        {
+          "data": {
+            "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/gadm41_MYS_1.json",
+            "format": {"type": "topojson", "feature": "gadm41_MYS_1"}
+          },
+          "transform": [
+            {
+              "calculate": "datum.properties.NAME_1 == 'W.P. Kuala Lumpur' ? 'KualaLumpur' : " +
+                          "datum.properties.NAME_1 == 'W.P. Putrajaya' ? 'Putrajaya' : " +
+                          "datum.properties.NAME_1 == 'Negeri Sembilan' ? 'NegeriSembilan' : " +
+                          "datum.properties.NAME_1 == 'Pulau Pinang' ? 'PulauPinang' : " +
+                          "datum.properties.NAME_1 == 'Terengganu' ? 'Trengganu' : " +
+                          "datum.properties.NAME_1 == 'W.P. Labuan' ? 'Labuan' : " +
+                          "datum.properties.NAME_1",
+              "as": "csv_state_name"
+            },
+            {
+              "lookup": "csv_state_name",
+              "from": {
+                "data": {
+                  "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_inequality_state.csv"
+                },
+                "key": "state",
+                "fields": ["gini", "date"]
+              }
+            },
+            {
+              "calculate": "datum.date ? toNumber(substring(datum.date,0,4)) : null",
+              "as": "year"
+            },
+            {
+              "filter": "datum.year != 2022 || datum.gini == null || datum.gini == ''"
+            }
+          ],
+          "mark": {"type": "geoshape", "fill": "#cccccc", "stroke": "white", "strokeWidth": 0.5},
+          "encoding": {
+            "tooltip": [
+              {"field": "properties.NAME_1", "title": "State"},
+              {"value": "No data for 2022"}
             ]
           }
         }
       ]
     };
 
-    vegaEmbed('#vis', spec).then(function(result) {
-      console.log("Map rendered successfully!");
-    }).catch(console.error);
+    vegaEmbed("#map", mapSpec, {actions: false})
+      .then(res => {
+        console.log("Map rendered");
+        const view = res.view;
+        
+        // Listen for state selection changes
+        view.addSignalListener('state_selection_pretty', (name, selectedState) => {
+          const infoPanel = document.getElementById('stateInfo');
+          const stateNameValue = document.getElementById('stateNameValue');
+          const giniValueNumber = document.getElementById('giniValueNumber');
+          const yearValueNumber = document.getElementById('yearValueNumber');
+          
+          if (selectedState === 'All States') {
+            // Hide info panel when "All States" is selected
+            infoPanel.classList.add('hidden');
+          } else {
+            // Get the data for the selected state
+            const csvName = view.signal('state_selection_csv');
+            
+            // We need to extract the data from the view
+            view.getState().data.forEach((dataName, dataTable) => {
+              if (dataName === 'source_0') { // This is our main data source
+                const stateData = dataTable.values().find(d => {
+                  const stateName = d.properties && d.properties.NAME_1;
+                  const calculatedName = stateName === 'W.P. Kuala Lumpur' ? 'KualaLumpur' :
+                                       stateName === 'W.P. Putrajaya' ? 'Putrajaya' :
+                                       stateName === 'Negeri Sembilan' ? 'NegeriSembilan' :
+                                       stateName === 'Pulau Pinang' ? 'PulauPinang' :
+                                       stateName === 'Terengganu' ? 'Trengganu' :
+                                       stateName === 'W.P. Labuan' ? 'Labuan' : stateName;
+                  return calculatedName === csvName;
+                });
+                
+                if (stateData && stateData.gini) {
+                  // Update the info panel with the state data
+                  stateNameValue.textContent = selectedState;
+                  giniValueNumber.textContent = stateData.gini.toFixed(3);
+                  yearValueNumber.textContent = '2022';
+                  infoPanel.classList.remove('hidden');
+                }
+              }
+            });
+          }
+        });
+      })
+      .catch(err => console.error(err));
   </script>
+
+
+
+
+ <div class="viz-card">
+        <div class="viz-header">
+          <div class="viz-title">Absolute Poverty Rates by State (2022)</div>
+          <div class="viz-type">Bar Chart</div>
+        </div>
+        <div class="viz-description">
+          Displays the percentage of population living below the poverty line in each state. Sabah has the highest poverty rate at 19.7%, while Putrajaya has the lowest at 0.1%.
+        </div>
+        <div class="viz-container" id="povertyBarChart"></div>
+      </div>
+
+  <script type="text/javascript">
+    const povertyBarSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "title": "Absolute Poverty Rates by State (2022) - Ranked from Highest to Lowest",
+      "data": {
+        "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_poverty_state.csv"
+      },
+      "transform": [
+        {"filter": "datum.date == '2022-01-01'"},
+        {"filter": "datum.poverty_absolute != null && datum.poverty_absolute != ''"},
+        {
+          "calculate": "toNumber(datum.poverty_absolute)",
+          "as": "poverty_abs_num"
+        },
+        {
+          "calculate": "toNumber(datum.poverty_hardcore)",
+          "as": "poverty_hardcore_num"
+        },
+        {
+          "calculate": "toNumber(datum.poverty_relative)", 
+          "as": "poverty_relative_num"
+        },
+        {
+          "window": [{"op": "rank", "as": "rank"}],
+          "sort": [{"field": "poverty_abs_num", "order": "descending"}]
+        }
+      ],
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "poverty_abs_num",
+          "type": "quantitative",
+          "title": "Absolute Poverty Rate (%)",
+          "axis": {"format": ".1f"}
+        },
+        "y": {
+          "field": "state",
+          "type": "nominal",
+          "title": "State",
+          "sort": {"field": "poverty_abs_num", "order": "descending"},
+          "axis": {"labelLimit": 150}
+        },
+        "color": {
+          "field": "poverty_abs_num",
+          "type": "quantitative",
+          "scale": {"scheme": "reds", "domain": [0, 25]},
+          "legend": {"title": "Poverty Rate %"}
+        },
+        "tooltip": [
+          {"field": "state", "title": "State"},
+          {"field": "poverty_abs_num", "title": "Absolute Poverty", "format": ".1f"},
+          {"field": "poverty_hardcore_num", "title": "Hardcore Poverty", "format": ".1f"},
+          {"field": "poverty_relative_num", "title": "Relative Poverty", "format": ".1f"},
+          {"field": "rank", "title": "Rank"}
+        ]
+      },
+      "width": 800,
+      "height": 600
+    };
+
+    // Embed the bar chart
+    vegaEmbed("#povertyBarChart", povertyBarSpec, {actions: false})
+      .then(result => {
+        console.log("Poverty bar chart rendered successfully");
+      })
+      .catch(error => {
+        console.error("Error embedding poverty bar chart:", error);
+      });
+  </script>
+
+
+
+
+
+<!-- Lollipop Chart Section -->
+  <!-- Mean Household Income -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-title">Mean Household Income by State (2022)</div>
+    <div class="viz-type">Lollipop Chart</div>
+  </div>
+  <div class="viz-description">
+    Compares average household income across states. Putrajaya and Kuala Lumpur have the highest incomes (over RM 13,000), while Kelantan has the lowest (RM 4,885).
+  </div>
+  <div class="viz-container" id="lollipopChart"></div>
+</div>
+
+<script type="text/javascript">
+  const lollipopChartSpec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {"text": "Mean Household Income by State (2022) - Ranked from Highest to Lowest"},
+    "width": 800,
+    "height": 600,
+    "data": {
+      "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_income_state.csv"
+    },
+    "transform": [
+      {
+        "calculate": "toNumber(substring(datum.date,0,4))",
+        "as": "year"
+      },
+      {
+        "filter": "datum.year == 2022 && datum.income_mean != null && datum.income_mean != ''"
+      },
+      // Sort by income_mean (highest to lowest)
+      {
+        "window": [{"op": "rank", "as": "rank"}],
+        "sort": [{"field": "income_mean", "order": "descending"}]
+      }
+    ],
+    "layer": [
+      // Lines (the sticks of the lollipop)
+      {
+        "mark": {
+          "type": "rule",
+          "strokeWidth": 2
+        },
+        "encoding": {
+          "x": {
+            "field": "income_mean",
+            "type": "quantitative",
+            "title": "Mean Household Income (RM)",
+            "axis": {
+              "format": ",.0f", // format to regfular numbers
+              "values": [4000, 6000, 8000, 10000, 12000, 14000] 
+            },
+            "scale": {"domain": [4000, 14000]}
+          },
+          "x2": {"value": 0},
+          "y": {
+            "field": "state",
+            "type": "nominal",
+            "sort": {"field": "rank", "order": "ascending"},
+            "title": "State"
+          },
+          "color": {
+            "field": "income_mean",
+            "type": "quantitative",
+            "scale": {"scheme": "blues"}
+          }
+        }
+      },
+      // Circles (the heads of the lollipop)
+      {
+        "mark": {
+          "type": "circle",
+          "size": 100,
+          "strokeWidth": 1
+        },
+        "encoding": {
+          "x": {
+            "field": "income_mean",
+            "type": "quantitative",
+            "title": "Mean Household Income (RM)",
+            "axis": {"format": ","}
+          },
+          "y": {
+            "field": "state",
+            "type": "nominal",
+            "sort": {"field": "rank", "order": "ascending"},
+            "title": "State"
+          },
+          "color": {
+            "field": "income_mean",
+            "type": "quantitative",
+            "scale": {"scheme": "blues"},
+            "legend": {"title": "Income (RM)"}
+          },
+          "tooltip": [
+            {"field": "state", "title": "State"},
+            {"field": "income_mean", "title": "Mean Income", "format": ","},
+            {"field": "income_median", "title": "Median Income", "format": ","},
+            {"field": "rank", "title": "Rank"}
+          ]
+        }
+      }
+    ]
+  };
+
+  // Embed the lollipop chart
+  vegaEmbed("#lollipopChart", lollipopChartSpec, {actions: false})
+    .then(res => console.log("Lollipop chart rendered"))
+    .catch(err => console.error(err));
+</script>
+
+
+
+<div class="viz-card wide">
+        <div class="viz-header">
+          <div class="viz-title">Household Income vs Expenditure by State (2022)</div>
+          <div class="viz-type">Bubble Chart</div>
+        </div>
+        <div class="viz-description">
+          Examines the relationship between household income and spending patterns. 
+          Bubble size represents poverty rate. Higher income generally correlates with higher expenditure, but some states show different spending patterns relative to their income levels.
+        </div>
+        <div class="viz-container" id="bubbleChart"></div>
+      </div>
+    </div>
+
+    <section class="key-insights">
+      <h2>Key Insights</h2>
+      <div class="insight-item">
+        <strong>Income Inequality Has Improved:</strong> Malaysia's Gini coefficient has decreased from 0.557 in 1976 to 0.404 in 2022, showing significant progress in reducing income inequality over five decades.
+      </div>
+      <div class="insight-item">
+        <strong>Regional Disparities Are Significant:</strong> States like Sabah (19.7%) and Kelantan (13.2%) have poverty rates more than 10 times higher than Kuala Lumpur (1.4%) and Putrajaya (0.1%).
+      </div>
+      <div class="insight-item">
+        <strong>Income and Poverty Correlation:</strong> States with higher mean household incomes generally have lower poverty rates, though the relationship isn't perfect due to varying costs of living and economic structures.
+      </div>
+      <div class="insight-item">
+        <strong>Urban-Rural Divide:</strong> Federal territories and more urbanized states (Kuala Lumpur, Putrajaya, Selangor) show significantly better economic outcomes than predominantly rural states.
+      </div>
+      <div class="insight-item">
+        <strong>Eastern Malaysia Challenges:</strong> Both Sabah and Sarawak continue to face substantial economic challenges compared to peninsular states, with higher poverty rates and lower average incomes.
+      </div>
+    </section>
+<div id="bubbleChartSection">
+  
+
+
+<script type="text/javascript">
+  const bubbleChartSpec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Household Income vs Expenditure by State (2022) - Bubble Size = Poverty Rate",
+    "width": 800,
+    "height": 500,
+    "data": {
+      "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hies_state.csv"
+    },
+    "transform": [
+      {
+        "filter": "datum.date == '2022-01-01'"
+      }
+    ],
+    "mark": {
+      "type": "circle",
+      "opacity": 0.8,
+    },
+    "encoding": {
+      "x": {
+        "field": "income_mean",
+        "type": "quantitative",
+        "title": "Mean Household Income (RM)",
+        "axis": {"format": ","},
+        "scale": {"domain": [4000, 14000]}
+      },
+      "y": {
+        "field": "expenditure_mean",
+        "type": "quantitative",
+        "title": "Mean Expenditure (RM)",
+        "axis": {"format": ","},
+        "scale": {"domain": [3000, 9000]}
+      },
+      "size": {
+        "field": "poverty",
+        "type": "quantitative",
+        "title": "Poverty Rate (%)",
+        "legend": {"format": ".1f"},
+        "scale": {"range": [100, 2500]} // Larger poverty = larger bubble
+      },
+      "color": {
+        "field": "state",
+        "type": "nominal",
+        "title": "State",
+        "scale": {"scheme": "category20"}
+      },
+      "tooltip": [
+        {"field": "state", "title": "State"},
+        {"field": "income_mean", "title": "Mean Income", "format": ","},
+        {"field": "expenditure_mean", "title": "Mean Expenditure", "format": ","},
+        {"field": "poverty", "title": "Poverty Rate", "format": ".1f"},
+        {"field": "gini", "title": "Gini Coefficient", "format": ".3f"}
+      ]
+    },
+    "config": {
+      "view": {"stroke": "transparent"}
+    }
+  };
+
+  // Embed the bubble chart
+  vegaEmbed("#bubbleChart", bubbleChartSpec, {actions: false})
+    .then(res => console.log("Bubble chart rendered"))
+    .catch(err => console.error(err));
+</script>
+
+<footer class="footer">
+      <p>Data Source: Department of Statistics Malaysia | Visualization by Malaysia Income Inequality and Poverty Visualisation Project</p>
+      <p>Last updated: 2022 Data</p>
+    </footer>
+  </div>
+
+
 </body>
 </html>
+
+
+
+
+
