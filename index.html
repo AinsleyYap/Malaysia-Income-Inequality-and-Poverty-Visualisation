@@ -731,7 +731,7 @@ body {
 
 <!-- Combined Insights for State-Level Visualizations -->
 <div class="overview-insight">
-  <h3>How Income Inequality, Poverty, and Household Income Interconnect</h3>
+  <h3>How Household Income, Income Inequality and Poverty Interconnect</h3>
   <div class="overview-content" style="text-align: center;">
     <ul style="margin: 0 auto; padding-left: 0; color: #4a5568; font-size: 1rem; line-height: 1.6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style: none; max-width: 1100px; ">
       <li style="text-align: center; margin-bottom: 12px;">
@@ -745,6 +745,211 @@ body {
   </div>
 </div>
 
+<!-- Lollipop Chart for Mean household Income by State -->
+<div class="visualization-grid">  
+<div class="viz-card wide">
+  <div class="viz-header">
+    <div class="viz-title"><h3>Mean Household Income by State (2022)</h3></div>
+    <!-- <div class="viz-type">Lollipop Chart</div> -->
+  </div>
+  <div class="viz-description">
+    Comparing the average household income across states, Putrajaya and Kuala Lumpur have the highest incomes (over RM 13,000), while Kelantan has the lowest (RM 4,885).
+  </div>
+  <div class="viz-container" id="lollipopChart"></div>
+   <div class="viz-description">
+    Malaysia shows <strong>extreme regional income inequality</strong>, with federal territories prospering while Eastern and Northern states face substantial economic challenges.
+    The gap is staggering: <strong>Kelantan's income (RM 4,885) is less than 40% of Putrajaya's (RM 13,473)</strong>, representing one of Southeast Asia's largest regional divides.
+</div>
+  
+</div>
+</div>
+
+
+<script type="text/javascript">
+  const lollipopChartSpec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {"text": "Mean Household Income by State (2022)"},
+    "width": 800,
+    "height": 600,
+    "config": {
+      "title": {
+        "fontSize": 17,
+        "fontWeight": "bold"
+      },
+      "axis": {
+        "titleFontSize": 16,
+        "labelFontSize": 14,
+        "titleFontWeight": "bold"
+      },
+      "legend": {
+        "titleFontSize": 14,
+        "labelFontSize": 12
+      }
+    },
+    "data": {
+      "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_income_state.csv"
+    },
+    "params": [
+      {
+        "name": "min_income",
+        "value": 4000,
+        "bind": {
+          "input": "range",
+          "min": 4000,
+          "max": 13000,
+          "step": 500,
+          "name": "Show states with income above (RM):",
+          
+        }
+      }
+    ],
+    "transform": [
+      {
+        "filter": "datum.date == '2022-01-01' && datum.income_mean != null"
+      },
+      {
+        "filter": "datum.income_mean >= min_income"
+      }
+    ],
+    "encoding": {
+      "y": {
+        "type": "nominal",
+        "sort": [
+        "W.P. Putrajaya", "W.P. Kuala Lumpur", "Selangor","Johor", "Pulau Pinang", "W.P. Labuan", 
+        "Melaka",  "Terengganu", 
+        "Negeri Sembilan", "Sarawak", "Sabah", "Perak", "Pahang",
+        "Perlis",  "Kedah", "Kelantan"
+      ],
+        "title": "State"
+      }
+    },
+    "layer": [
+      // Lines (the sticks of the lollipop)
+      {
+        "mark": {
+          "type": "rule",
+          "strokeWidth": 4
+        },
+        "encoding": {
+          "x": {
+            "field": "income_mean",
+            "type": "quantitative",
+            "title": "Mean Household Income (RM)",
+            "axis": {
+              "format": ",.0f",
+              "values": [4000, 6000, 8000, 10000, 12000, 14000, 16000] ,
+              "titlePadding": 20 
+            },
+            "scale": {"domain": [4000, 16000]}
+          },
+          "x2": {"value": 0},
+          "y": {
+            "field": "state",
+            "type": "nominal",
+            "axis": {
+            "titlePadding": 20  // Space for y-axis
+          }
+          },
+          "color": {
+            "field": "income_mean",
+            "type": "quantitative",
+            "scale": {"scheme": "blues"}
+          }
+        }
+      },
+      // Circles (the heads of the lollipop)
+      {
+        "mark": {
+          "type": "circle",
+          "size": 150,
+          "strokeWidth": 4,
+          "opacity": 1 
+        },
+        "encoding": {
+          "x": {
+            "field": "income_mean",
+            "type": "quantitative"
+          },
+          "y": {
+            "field": "state",
+            "type": "nominal"
+          },
+          "color": {
+            "field": "income_mean",
+            "type": "quantitative",
+            "scale": {"scheme": "blues"},
+            "legend": {"title": "Income (RM)"}
+          },
+          "tooltip": [
+            {"field": "state", "title": "State"},
+            {"field": "income_mean", "title": "Mean Income", "format": ","},
+            {"field": "income_median", "title": "Median Income", "format": ","}
+          ]
+        }
+      },
+      // Annotations layer - WITH FILTER
+      {
+        "transform": [
+          {
+            "filter": "datum.income_mean >= min_income"
+          }
+        ],
+        "data": {
+          "values": [
+            {
+              "state": "W.P. Putrajaya",
+              "income_mean": 13473,
+              "annotation": "Highest: RM 13,473"
+            },
+            {
+              "state": "W.P. Kuala Lumpur", 
+              "income_mean": 13325,
+              "annotation": "RM 13,325"
+            },
+            {
+              "state": "Selangor",
+              "income_mean": 12233,
+              "annotation": "RM 12,233"
+            },
+            {
+              "state": "Kelantan",
+              "income_mean": 4885,
+              "annotation": "Lowest: RM 4,885"
+            }
+          ]
+        },
+        "mark": {
+          "type": "text",
+          "align": "left",
+          "dx": 10,
+          "fontSize": 14,
+          "fontWeight": "bold",
+          "fill": "#333"
+        },
+        "encoding": {
+          "x": {
+            "field": "income_mean",
+            "type": "quantitative"
+          },
+          "y": {
+            "field": "state",
+            "type": "nominal"
+          },
+          "text": {
+            "field": "annotation",
+            "type": "nominal"
+          }
+        }
+      }
+    ]
+  };
+
+  // Embed the lollipop chart
+  vegaEmbed("#lollipopChart", lollipopChartSpec, {actions: false})
+    .then(res => console.log("Lollipop chart rendered"))
+    .catch(err => console.error(err));
+</script>
+
 
 
 <!-- Chloropeth Map for Household Income Inequality by State -->
@@ -757,13 +962,13 @@ body {
     
   </div>
   <div class="viz-description">
-    The Gini coefficients across Malaysian states. Darker colors indicate higher income inequality within the state. Sabah has the highest inequality (0.395), while Pahang has the lowest (0.308).
+    The visualisation shows the Gini coefficients across Malaysian states. Darker colors indicate higher income inequality within the state. Sabah has the highest inequality (0.395), while Pahang has the lowest (0.308).
   </div>
   <div class="viz-container" id="map"></div>
   <div class="viz-description">
     Eastern Malaysian states show <strong>higher internal inequality</strong> despite lower overall development, indicating concentrated economic benefits.
-    Wealthier states like Selangor and Kuala Lumpur prove that <strong>economic growth and equitable distribution can coexist</strong> with effective policies.
- </div>
+    While <strong>Selangor, KL, and Putrajaya lead in income</strong>, they also show <strong>higher inequality levels</strong> (Gini 0.361-0.380), contrasting with states like Pahang that achieve lower inequality but with reduced economic output.
+   </div>
   
 
 </div>
@@ -773,7 +978,7 @@ body {
   <script type="text/javascript">
     const mapSpec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "title": "Household Income Inequality in Malaysia by State - 2022",
+      "title": "Household Income Inequality in Malaysia by State (2022)",
       "width": 700,
       "height": 400,
       "config": {
@@ -1202,8 +1407,8 @@ body {
   </div>
   <div class="viz-container" id="povertyBarChart"></div>
   <div class="viz-description">
-    The data reveals <strong>extreme regional disparities</strong> in Malaysia's poverty landscape. While federal territories and developed states have largely conquered absolute poverty, Eastern Malaysia faces challenges comparable to some developing nations.
-    What's particularly telling is that <strong>Sabah's poverty rate (19.7%) exceeds the national average of many developing countries</strong>, while Putrajaya's (0.1%) rivals developed nations. This internal divide represents one of Malaysia's most pressing development challenges.
+    The data reveals <strong>extreme regional disparities</strong> across Malaysia's economic landscape. While federal territories achieve both high incomes and near-zero poverty, Eastern Malaysia faces a triple burden: <strong>high inequality, extreme poverty, and low household incomes</strong>.
+What's particularly telling is that <strong>Sabah's poverty rate (19.7%) coexists with the nation's highest inequality (0.395 Gini)</strong>, trapping households at RM 6,171 incomes, while Putrajaya demonstrates how <strong>low poverty enables high incomes (RM 13,473)</strong> despite moderate inequality. This interconnected divide represents one of Malaysia's most pressing development challenges.
 </div>
 </div>
 </div>
@@ -1214,7 +1419,7 @@ body {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
     "height": 200,
-    "title": "Absolute Poverty Rates by State (2022) - Ranked from Highest to Lowest",
+    "title": "Absolute Poverty Rates by State (2022)",
     "data": {
       "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_poverty_state (2).csv"
     },
@@ -1304,211 +1509,6 @@ body {
 
 
 
-<!-- Lollipop Chart for Mean household Income by State -->
-<div class="visualization-grid">  
-<div class="viz-card wide">
-  <div class="viz-header">
-    <div class="viz-title"><h3>Mean Household Income by State (2022)</h3></div>
-    <!-- <div class="viz-type">Lollipop Chart</div> -->
-  </div>
-  <div class="viz-description">
-    Comparing the average household income across states, Putrajaya and Kuala Lumpur have the highest incomes (over RM 13,000), while Kelantan has the lowest (RM 4,885).
-  </div>
-  <div class="viz-container" id="lollipopChart"></div>
-   <div class="viz-description">
-    Malaysia shows <strong>extreme regional income inequality</strong>, with federal territories prospering while Eastern and Northern states face substantial economic challenges.
-    The gap is staggering: <strong>Kelantan's income (RM 4,885) is less than 40% of Putrajaya's (RM 13,473)</strong>, representing one of Southeast Asia's largest regional divides.
-</div>
-  
-</div>
-</div>
-
-
-<script type="text/javascript">
-  const lollipopChartSpec = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "title": {"text": "Mean Household Income by State (2022) - Ranked from Highest to Lowest"},
-    "width": 800,
-    "height": 600,
-    "config": {
-      "title": {
-        "fontSize": 17,
-        "fontWeight": "bold"
-      },
-      "axis": {
-        "titleFontSize": 16,
-        "labelFontSize": 14,
-        "titleFontWeight": "bold"
-      },
-      "legend": {
-        "titleFontSize": 14,
-        "labelFontSize": 12
-      }
-    },
-    "data": {
-      "url": "https://raw.githubusercontent.com/AinsleyYap/Malaysia-Income-Inequality-and-Poverty-Visualisation/main/hh_income_state.csv"
-    },
-    "params": [
-      {
-        "name": "min_income",
-        "value": 4000,
-        "bind": {
-          "input": "range",
-          "min": 4000,
-          "max": 13000,
-          "step": 500,
-          "name": "Show states with income above (RM):",
-          
-        }
-      }
-    ],
-    "transform": [
-      {
-        "filter": "datum.date == '2022-01-01' && datum.income_mean != null"
-      },
-      {
-        "filter": "datum.income_mean >= min_income"
-      }
-    ],
-    "encoding": {
-      "y": {
-        "type": "nominal",
-        "sort": [
-        "W.P. Putrajaya", "W.P. Kuala Lumpur", "Selangor","Johor", "Pulau Pinang", "W.P. Labuan", 
-        "Melaka",  "Terengganu", 
-        "Negeri Sembilan", "Sarawak", "Sabah", "Perak", "Pahang",
-        "Perlis",  "Kedah", "Kelantan"
-      ],
-        "title": "State"
-      }
-    },
-    "layer": [
-      // Lines (the sticks of the lollipop)
-      {
-        "mark": {
-          "type": "rule",
-          "strokeWidth": 4
-        },
-        "encoding": {
-          "x": {
-            "field": "income_mean",
-            "type": "quantitative",
-            "title": "Mean Household Income (RM)",
-            "axis": {
-              "format": ",.0f",
-              "values": [4000, 6000, 8000, 10000, 12000, 14000, 16000] ,
-              "titlePadding": 20 
-            },
-            "scale": {"domain": [4000, 16000]}
-          },
-          "x2": {"value": 0},
-          "y": {
-            "field": "state",
-            "type": "nominal",
-            "axis": {
-            "titlePadding": 20  // Space for y-axis
-          }
-          },
-          "color": {
-            "field": "income_mean",
-            "type": "quantitative",
-            "scale": {"scheme": "blues"}
-          }
-        }
-      },
-      // Circles (the heads of the lollipop)
-      {
-        "mark": {
-          "type": "circle",
-          "size": 150,
-          "strokeWidth": 4,
-          "opacity": 1 
-        },
-        "encoding": {
-          "x": {
-            "field": "income_mean",
-            "type": "quantitative"
-          },
-          "y": {
-            "field": "state",
-            "type": "nominal"
-          },
-          "color": {
-            "field": "income_mean",
-            "type": "quantitative",
-            "scale": {"scheme": "blues"},
-            "legend": {"title": "Income (RM)"}
-          },
-          "tooltip": [
-            {"field": "state", "title": "State"},
-            {"field": "income_mean", "title": "Mean Income", "format": ","},
-            {"field": "income_median", "title": "Median Income", "format": ","}
-          ]
-        }
-      },
-      // Annotations layer - WITH FILTER
-      {
-        "transform": [
-          {
-            "filter": "datum.income_mean >= min_income"
-          }
-        ],
-        "data": {
-          "values": [
-            {
-              "state": "W.P. Putrajaya",
-              "income_mean": 13473,
-              "annotation": "Highest: RM 13,473"
-            },
-            {
-              "state": "W.P. Kuala Lumpur", 
-              "income_mean": 13325,
-              "annotation": "RM 13,325"
-            },
-            {
-              "state": "Selangor",
-              "income_mean": 12233,
-              "annotation": "RM 12,233"
-            },
-            {
-              "state": "Kelantan",
-              "income_mean": 4885,
-              "annotation": "Lowest: RM 4,885"
-            }
-          ]
-        },
-        "mark": {
-          "type": "text",
-          "align": "left",
-          "dx": 10,
-          "fontSize": 14,
-          "fontWeight": "bold",
-          "fill": "#333"
-        },
-        "encoding": {
-          "x": {
-            "field": "income_mean",
-            "type": "quantitative"
-          },
-          "y": {
-            "field": "state",
-            "type": "nominal"
-          },
-          "text": {
-            "field": "annotation",
-            "type": "nominal"
-          }
-        }
-      }
-    ]
-  };
-
-  // Embed the lollipop chart
-  vegaEmbed("#lollipopChart", lollipopChartSpec, {actions: false})
-    .then(res => console.log("Lollipop chart rendered"))
-    .catch(err => console.error(err));
-</script>
-
 
 
 
@@ -1537,8 +1537,10 @@ body {
   </div>
   <div class="viz-container" id="bubbleChart"></div>
    <div class="viz-description">
-    This visualization reveals that <strong>income alone doesn't determine spending patterns</strong> across Malaysian states. The most telling insight is the <strong>spending-pressure paradox in Eastern Malaysia</strong>, where households in Sabah and Sarawak spend relatively more of their income despite lower earnings, highlighting regional cost disparities and economic challenges.
-   </div>
+  This visualization completes the economic picture: states with <strong>lower income, high inequality and high poverty rates</strong> like Kelantan, Kedah as 
+  well as Sabah and Sarawak on Eastern Malaysia also experience <strong>spending pressures due to limited incomes</strong>, while wealthier regions with 
+  lower inequality can maintain healthier income-expenditure ratios, reinforcing existing economic advantages.
+  </div>
 
   
   
