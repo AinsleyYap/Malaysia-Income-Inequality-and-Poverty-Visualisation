@@ -1262,7 +1262,7 @@ body {
       "color": {
         "field": "poverty_abs_num",
         "type": "quantitative",
-        "scale": {"scheme": "reds", "domain": [0, 25]},
+        "scale": {"scheme": "oranges", "domain": [0, 25]},
         "legend": {"title": "Poverty Rate %"}
       },
       "tooltip": [
@@ -1387,7 +1387,7 @@ body {
       {
         "mark": {
           "type": "rule",
-          "strokeWidth": 2
+          "strokeWidth": 4
         },
         "encoding": {
           "x": {
@@ -1420,8 +1420,9 @@ body {
       {
         "mark": {
           "type": "circle",
-          "size": 100,
-          "strokeWidth": 1
+          "size": 150,
+          "strokeWidth": 4,
+          "opacity": 1 
         },
         "encoding": {
           "x": {
