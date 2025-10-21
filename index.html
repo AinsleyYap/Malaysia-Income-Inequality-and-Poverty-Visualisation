@@ -25,7 +25,7 @@ body {
 }
 
 .dashboard-container {
-  max-width: 100%; 
+  max-width: 1200px; /* Set a max width for content */
   margin: 0 auto;
   padding: 20px;
   width: 100%;
@@ -35,24 +35,30 @@ body {
 .dashboard-header {
   font-family: Georgia, serif;
   text-align: center;
-  margin-bottom: 40px;
-  padding: 40px 30px; /* Increased padding for better spacing */
-  
-  background: #1e4a63; /* Solid blue background */
-  color: white; /* White text */
-  border-radius: 0; /* Remove rounded corners for clean look */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow */
-  width: 100%;
+  margin: 0 calc(-50vw + 50%) 40px calc(-50vw + 50%);
+  padding: 60px 20px;
+  background: #2c5282;
+  color: white;
+  width: 100vw;
   box-sizing: border-box;
-  border-bottom: none; /* Remove the line separator */
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
+
 .dashboard-header h1 {
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-size: clamp(2.2rem, 5vw, 3rem);
   margin-bottom: 15px;
   font-weight: 700;
   word-wrap: break-word;
-  color: white; /* Ensure title is white */
+  color: white /* Change to black */
 }
 
 .dashboard-header p {
@@ -62,9 +68,12 @@ body {
   opacity: 0.9;
   word-wrap: break-word;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: white; /* Ensure paragraph is white */
-  opacity: 0.95; /* Slightly more opaque for better readability */
+  color: white /* Dark gray for paragraph */
+  opacity: 0.95;
 }
+
+
+
 .dashboard-description {
   background: white;
   padding: 25px;
@@ -416,6 +425,112 @@ body {
   margin-bottom: 0;
 }
 
+.overview-insight {
+  background: white;
+  font-family: Georgia, serif;
+  padding: 30px;
+  border-radius: 8px;
+  margin: 30px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.overview-insight h3 {
+  color: #2c5282;
+  margin-bottom: 25px;
+  font-size: clamp(1.4rem, 3vw, 1.6rem);
+  word-wrap: break-word;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 25px;
+  width: 100%;
+}
+
+.overview-item {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 25px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.overview-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  border-color: #2c5282;
+}
+
+.overview-content h4 {
+  color: #2c5282;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+
+.overview-content p {
+  color: #4a5568;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.overview-content strong {
+  color: #2c5282;
+  font-weight: 600;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .overview-insight {
+    padding: 20px 15px;
+    margin: 20px 0;
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .overview-item {
+    padding: 20px;
+  }
+  
+  .overview-content h4 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
+  
+  .overview-content p {
+    font-size: 0.95rem;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .overview-insight h3 {
+    font-size: 1.3rem;
+  }
+  
+  .overview-item {
+    padding: 15px;
+  }
+}
+
 @media (max-width: 480px) {
   .dashboard-container {
     padding: 10px;
@@ -460,20 +575,18 @@ body {
 
 <div class="dashboard-container">
   <header class="dashboard-header">
-    <h1>Malaysia: Income Inequality & Poverty Across States</h1>
+    <h1>Malaysia's Income Inequality & Poverty </h1>
     
-    <p>Analyzing income distribution, poverty rates, and regional disparities across Malaysian states</p>
+    <p>Analyzing income distribution, poverty rates, and regional disparities across Malaysia</p>
   </header>
 
-<section class="dashboard-description">
-    <!-- <h2>Overview</h2> -->
-     <p>This dashboard explores economic inequality across Malaysia to better understand regional disparities and temporal trends. 
-      We begin by examining the national picture of income inequality over time, then dive into state-level analysis to 
-     explore variations in income distribution, identify areas with the highest poverty rates, and analyze household spending patterns relative to income.
-    </p>
-</section>
 
-
+<!-- Section Header for National Trend -->
+<div class="section-header" style="text-align: center; margin-bottom: 20px;">
+  <h3 style="font-family: Georgia, serif; color: #000000; font-size: clamp(1.6rem, 4vw, 2rem); margin: 0; padding: 0;">
+    National Overview: Malaysia's Income Inequality Landscape
+  </h3>
+</div>
 
 <div class="visualization-grid">
   <!-- Gini Coefficient Trend -->
@@ -490,41 +603,7 @@ body {
       Malaysia shows <strong>consistent progress</strong> in reducing inequality over five decades, demonstrating structural economic transformation.
       This long-term trend reflects systematic efforts through education, industrialization, and social policies to improve wealth distribution.
 </div>
-    
-    <!-- Storytelling Insights Section -->
-    <div class="viz-insights">
-      <h3> Key Insights & Observations</h3>
-      <div class="insights-grid">
-        <div class="insight-item">
-          <div class="insight-content">
-            <h4>Remarkable Progress</h4>
-            <p>Malaysia reduced income inequality by <strong>27.5%</strong> since its peak in 1976, showing sustained commitment to economic reforms.</p>
-          </div>
-        </div>
-        
-        <div class="insight-item">
-          <div class="insight-content">
-            <h4>Policy Impact Visible</h4>
-            <p>The steep decline from 1976-1990 aligns with the <strong>New Economic Policy</strong> implementation, demonstrating policy effectiveness.</p>
-          </div>
-        </div>
-        
-        <div class="insight-item">
-          <div class="insight-content">
-            <h4>Recent Stabilization</h4>
-            <p>Since 2014, inequality has stabilized around 0.40, suggesting Malaysia has reached a new equilibrium in income distribution.</p>
-          </div>
-        </div>
-        
-        <div class="insight-item">
-          <div class="insight-content">
-            <h4>Historical Context</h4>
-            <p>The 1976 peak (0.557) represents one of Southeast Asia's highest inequality levels, making subsequent progress even more significant.</p>
-          </div>
-        </div>
-      </div>
-  
-    </div>
+
   </div>
 </div>
 
@@ -643,6 +722,30 @@ body {
 
 
 
+<!-- Section Header for State Visualizations -->
+<div class="section-header" style="text-align: center; margin-bottom: 20px;">
+  <h3 style="font-family: Georgia, serif; color: #000000; font-size: clamp(1.6rem, 4vw, 2rem); margin: 0; padding: 0;">
+    State-Level Analysis: Regional Economic Disparities
+  </h3>
+</div>
+
+<!-- Combined Insights for State-Level Visualizations -->
+<div class="overview-insight">
+  <h3>How Income Inequality, Poverty, and Household Income Interconnect</h3>
+  <div class="overview-content" style="text-align: center;">
+    <ul style="margin: 0 auto; padding-left: 0; color: #4a5568; font-size: 1rem; line-height: 1.6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; list-style: none; max-width: 1100px; ">
+      <li style="text-align: center; margin-bottom: 12px;">
+        <strong>Distinct Regional Economic Patterns:</strong> Clear income hierarchies emerge across Malaysia, with wealth concentrated in federal territories and coastal urban centers, while eastern and rural states face persistent inequality and poverty.
+      </li>
+      <li style="text-align: center; margin-bottom: 12px;">
+        <strong>Interlinked Inequality, Poverty, and Income Levels:</strong> States with higher inequality often experience elevated poverty rates and lower household incomes, revealing how uneven economic growth limits overall prosperity.
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+
 
 <!-- Chloropeth Map for Household Income Inequality by State -->
 <div class="visualization-grid">
@@ -662,41 +765,7 @@ body {
     Wealthier states like Selangor and Kuala Lumpur prove that <strong>economic growth and equitable distribution can coexist</strong> with effective policies.
  </div>
   
-  <!-- Storytelling Insights Section -->
-  <div class="viz-insights">
-    <h3>Regional Inequality Insights</h3>
-    <div class="insights-grid">
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Eastern Malaysia Challenge</h4>
-          <p><strong>Sabah (0.395)</strong> has the highest inequality, reflecting the urban-rural divide and economic disparities within the state despite natural resource wealth.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Pahang's Relative Equality</h4>
-          <p>With the lowest Gini coefficient (<strong>0.308</strong>), Pahang shows more balanced income distribution, potentially due to diversified economic activities.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Urban Centers Moderate</h4>
-          <p>Kuala Lumpur (0.380) and Selangor (0.361) show moderate inequality despite high incomes, suggesting effective urban poverty alleviation programs.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Regional Patterns</h4>
-          <p>Eastern states (Sabah, Sarawak) generally show higher inequality than peninsular states, highlighting the East-West development gap.</p>
-        </div>
-      </div>
-    </div>
-  
-  
-  </div>
+
 </div>
 
 </div>
@@ -1136,43 +1205,7 @@ body {
     The data reveals <strong>extreme regional disparities</strong> in Malaysia's poverty landscape. While federal territories and developed states have largely conquered absolute poverty, Eastern Malaysia faces challenges comparable to some developing nations.
     What's particularly telling is that <strong>Sabah's poverty rate (19.7%) exceeds the national average of many developing countries</strong>, while Putrajaya's (0.1%) rivals developed nations. This internal divide represents one of Malaysia's most pressing development challenges.
 </div>
-  
-  <!-- Storytelling Insights Section -->
-  <div class="viz-insights">
-    <h3>Poverty Landscape Insights</h3>
-    <div class="insights-grid">
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Extreme Disparities</h4>
-          <p><strong>Sabah's poverty rate (19.7%) is 197 times higher</strong> than Putrajaya's (0.1%), highlighting severe regional development gaps.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Critical Intervention Zones</h4>
-          <p>Three states exceed 10% poverty: <strong>Sabah (19.7%), Kelantan (13.2%), and Sarawak (10.8%)</strong> - requiring urgent targeted policies.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Success Stories</h4>
-          <p>Federal territories show near-zero poverty: <strong>Putrajaya (0.1%), Kuala Lumpur (1.4%), and Labuan (2.5%)</strong> - models for poverty eradication.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Middle Tier States</h4>
-          <p>Most peninsular states cluster between 4-9% poverty, showing consistent but incomplete progress in poverty reduction.</p>
-        </div>
-      </div>
-    </div>
-    
-  </div>
 </div>
-
 </div>
 
 
@@ -1287,43 +1320,10 @@ body {
     The gap is staggering: <strong>Kelantan's income (RM 4,885) is less than 40% of Putrajaya's (RM 13,473)</strong>, representing one of Southeast Asia's largest regional divides.
 </div>
   
-  <!-- Storytelling Insights Section -->
-  <div class="viz-insights">
-    <h3>Income Distribution Insights</h3>
-    <div class="insights-grid">
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Federal Territory Advantage</h4>
-          <p><strong>Putrajaya (RM 13,473)</strong> and <strong>Kuala Lumpur (RM 13,325)</strong> lead by significant margins, benefiting from administrative and economic centrality.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Eastern Malaysia Gap</h4>
-          <p><strong>Sabah (RM 6,171)</strong> and <strong>Sarawak (RM 6,457)</strong> lag behind, earning roughly half of what federal territories make, highlighting development disparities.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Industrial Corridor Effect</h4>
-          <p><strong>Selangor (RM 12,233)</strong> and <strong>Johor (RM 8,517)</strong> show strong performance, benefiting from industrialization and cross-border economic activities.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Income Multiplier</h4>
-          <p>The highest income (Putrajaya) is <strong>2.76 times</strong> the lowest (Kelantan), showing significant economic stratification across states.</p>
-        </div>
-      </div>
-    </div>
-    
-    
-  </div>
 </div>
 </div>
+
+
 <script type="text/javascript">
   const lollipopChartSpec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -1508,9 +1508,24 @@ body {
     .catch(err => console.error(err));
 </script>
 
+
+
+
+
+
+
+
+<!-- Section Header for Bubble Chart -->
+<div class="section-header" style="text-align: center; margin-bottom: 20px;">
+  <h3 style="font-family: Georgia, serif; color: #000000; font-size: clamp(1.6rem, 4vw, 2rem); margin: 0; padding: 0;">
+    From Patterns to Behavior: Analyzing Spending Decisions
+  </h3>
+</div>
+
 <!-- Bubble chart for Household income vs Expenditure by State -->
 <div class="visualization-grid"> 
 <div class="viz-card wide">
+    
   <div class="viz-header">
     <div class="viz-title"><h3>Household Income vs Expenditure by State (2022)</h3></div>
   
@@ -1525,41 +1540,7 @@ body {
    </div>
 
   
-  <!-- Storytelling Insights Section -->
-  <div class="viz-insights">
-    <h3>Spending Behavior Insights</h3>
-    <div class="insights-grid">
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Strong Income-Expenditure Correlation</h4>
-          <p>Wealthier states like <strong>Putrajaya and Kuala Lumpur</strong> show proportional spending, indicating sustainable consumption patterns aligned with income levels.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Eastern States' Spending Pressure</h4>
-          <p><strong>Sabah and Sarawak</strong> show relatively higher expenditure relative to income, suggesting cost-of-living pressures despite lower incomes.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Savings Potential Variations</h4>
-          <p>States like <strong>Selangor and Johor</strong> show healthy income-expenditure gaps, indicating better savings capacity and financial resilience.</p>
-        </div>
-      </div>
-      
-      <div class="insight-item">
-        <div class="insight-content">
-          <h4>Poverty-Spending Paradox</h4>
-          <p>Some high-poverty states maintain moderate expenditure levels, revealing complex household budgeting strategies in challenging economic conditions.</p>
-        </div>
-      </div>
-    </div>
-    
-
-  </div>
+  
 </div>
 </div>
   
@@ -1726,6 +1707,8 @@ body {
     .then(res => console.log("Bubble chart rendered"))
     .catch(err => console.error(err));
 </script>
+
+
 
 <footer class="footer">
   <div class="data-sources">
